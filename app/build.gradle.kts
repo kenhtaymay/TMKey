@@ -57,7 +57,7 @@ android {
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "it.srik.TypeQ25"
+        applicationId = "vn.taymay.keyboard"
         minSdk = 29
         targetSdk = 36
         versionCode = 5
@@ -88,12 +88,41 @@ android {
         buildConfigField("String", "BUILD_DATE", "\"$buildDate\"")
     }
 
+    // Upload key is read from keystore.properties (git-ignored), never hardcoded.
+    // "play": Google Play build without INTERNET, call-control or Accessibility.
+    // "full": sideload/GitHub build with every feature.
+    flavorDimensions += "store"
+    productFlavors {
+        create("play") {
+            dimension = "store"
+            buildConfigField("boolean", "PLAY_BUILD", "true")
+        }
+        create("full") {
+            dimension = "store"
+            buildConfigField("boolean", "PLAY_BUILD", "false")
+        }
+    }
+
+    // keystore.properties may hold the values directly, or `include=<path>` pointing at a
+    // shared properties file kept outside the repo (keys may use an "upload." prefix).
+    val keystorePropsFile = rootProject.file("keystore.properties")
+    val keystoreProps = Properties().apply {
+        if (keystorePropsFile.exists()) keystorePropsFile.inputStream().use { load(it) }
+        getProperty("include")?.let { path ->
+            file(path).inputStream().use { load(it) }
+        }
+    }
+    fun signingProp(name: String): String? =
+        keystoreProps.getProperty(name) ?: keystoreProps.getProperty("upload.$name")
+
     signingConfigs {
         create("release") {
-            storeFile = file("../TypeQ25-release-key.jks")
-            storePassword = "typeq25pass"
-            keyAlias = "typeq25-key"
-            keyPassword = "typeq25pass"
+            if (keystorePropsFile.exists()) {
+                storeFile = rootProject.file(signingProp("storeFile")!!)
+                storePassword = signingProp("storePassword")
+                keyAlias = signingProp("keyAlias")
+                keyPassword = signingProp("keyPassword")
+            }
         }
     }
 

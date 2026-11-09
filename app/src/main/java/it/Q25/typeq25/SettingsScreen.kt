@@ -659,6 +659,7 @@ fun SettingsScreen(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
+                if (!BuildConfig.PLAY_BUILD) { // update checks need INTERNET; Play updates the app itself
                 Surface(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -741,6 +742,7 @@ fun SettingsScreen(
                             }
                         }
                     }
+                }
                 }
 
                 // Build Info

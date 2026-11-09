@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">TypeQ25</string>
-    <string name="input_method_name">TypeQ25</string>
+    <string name="app_name">TMKey</string>
+    <string name="input_method_name">TMKey - Telex</string>
     <string name="input_method_name_en">English</string>
     <string name="input_method_name_it">Italiano</string>
     <string name="input_method_name_fr">Français</string>
@@ -42,22 +42,22 @@
     <string name="info_description">Le impostazioni vengono salvate automaticamente e applicate immediatamente all\'input method.</string>
     
     <!-- Main Activity -->
-    <string name="keyboard_title">TypeQ25 Keyboard</string>
+    <string name="keyboard_title">TMKey Keyboard</string>
     <string name="keyboard_subtitle">Tastiera fisica con supporto long press</string>
     <string name="settings_content_description">Impostazioni</string>
     
     <!-- Installation Section -->
     <string name="installation_title">Installazione</string>
     <string name="installation_step1">1. Clicca il pulsante qui sotto per aprire le impostazioni</string>
-    <string name="installation_step2">2. Attiva \'Tastiera Fisica TypeQ25\'</string>
+    <string name="installation_step2">2. Attiva \'Tastiera Fisica TMKey\'</string>
     <string name="installation_step3">3. Torna qui e testa la tastiera</string>
     <string name="open_keyboard_settings">Apri Impostazioni Tastiera</string>
     
     <!-- Main Activity - Enable/Select IME -->
-    <string name="enable_TypeQ25">Abilita TypeQ25</string>
-    <string name="TypeQ25_not_enabled">TypeQ25 non è abilitata</string>
+    <string name="enable_TypeQ25">Abilita TMKey</string>
+    <string name="TypeQ25_not_enabled">TMKey non è abilitata</string>
     <string name="choose_input_method">Scegli metodo di immissione</string>
-    <string name="TypeQ25_not_selected">TypeQ25 non è selezionata</string>
+    <string name="TypeQ25_not_selected">TMKey non è selezionata</string>
     
     <!-- Test Section -->
     <string name="test_keyboard_title">Test Tastiera</string>
@@ -192,8 +192,8 @@
     <string name="launcher_shortcut_assignment_key_name">Tasto %1$d</string>
     
     <!-- Notification Helper -->
-    <string name="notification_nav_mode_channel_name">TypeQ25 Nav Mode</string>
-    <string name="notification_nav_mode_channel_description">Notifiche per il nav mode di TypeQ25</string>
+    <string name="notification_nav_mode_channel_name">TMKey Nav Mode</string>
+    <string name="notification_nav_mode_channel_description">Notifiche per il nav mode di TMKey</string>
     <string name="notification_nav_mode_activated_title">Nav Mode Attivato</string>
     <string name="notification_nav_mode_activated_text">Nav mode attivato</string>
     
@@ -272,7 +272,7 @@
     <string name="settings_trackpad_debug_description">Testa eventi trackpad/tastiera touch-sensitive</string>
     
     <!-- Auto Correct Settings -->
-    <string name="auto_correct_TypeQ25_name">TypeQ25</string>
+    <string name="auto_correct_TypeQ25_name">TMKey</string>
     
     <!-- Settings Categories -->
     <string name="settings_category_keyboard_timing">Tastiera &amp; Temporizzazione</string>

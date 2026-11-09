@@ -1,3 +1,16 @@
+# TMKey – Telex cho Q25 và P26
+
+Bàn phím Telex cho điện thoại phím cứng (Zinwa Q25, P26), do **Kênh Táy Máy** phát triển.
+
+> TMKey là bản fork của [TypeQ25](https://github.com/sriharshaKanukuntla/TypeQ25) (tác giả Sriharsha Kanukuntla), phát hành theo giấy phép **GPL-3.0** như bản gốc. Thay đổi chính: bộ gõ Telex tiếng Việt, phím tắt SYM cho âm lượng/đèn nền, sửa lỗi phím Alt, và bản build `play` không cần quyền Internet, cuộc gọi hay Accessibility.
+
+## Build
+- Bản Google Play: `gradlew bundlePlayRelease`
+- Bản đầy đủ (GitHub/APK): `gradlew assembleFullRelease`
+- Khóa ký: chép `keystore.properties.example` thành `keystore.properties`.
+
+---
+
 # TypeQ25
 
 A comprehensive physical keyboard input method (IME) for Android devices with physical QWERTY keyboards. Specifically designed and optimized for devices like the Unihertz Titan 2 and Zinwa/Unihertz Q25. Built as a hobby project to make typing on physical keyboards more efficient, powerful, and enjoyable.

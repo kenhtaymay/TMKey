@@ -418,7 +418,8 @@ fun TextInputSettingsScreen(
                 }
             }
             
-            // Auto-Focus Input Fields
+            // Auto-Focus Input Fields (needs Accessibility; not shipped in the Play build)
+            if (!BuildConfig.PLAY_BUILD) {
             var autoFocusInputFields by remember { mutableStateOf(SettingsManager.getAutoFocusInputFields(context)) }
             
             Surface(
@@ -469,6 +470,7 @@ fun TextInputSettingsScreen(
                         }
                     )
                 }
+            }
             }
 
             // Emoji Shortcode

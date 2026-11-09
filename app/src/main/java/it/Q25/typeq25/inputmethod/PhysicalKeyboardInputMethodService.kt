@@ -57,7 +57,8 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), LifecycleOwner,
 
     companion object {
         private const val TAG = "TypeQ25InputMethod"
-        
+        private const val TELEX_MAX_WORD_LENGTH = 16
+
         // Instance reference for direct emoji commit access
         @Volatile
         private var instance: PhysicalKeyboardInputMethodService? = null
@@ -404,11 +405,59 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), LifecycleOwner,
     }
 
     private fun cycleLayoutFromShortcut() {
+        // Telex is an extra stop in the cycle: layout -> layout + Telex -> next layout
+        if (!SettingsManager.getTelexEnabled(this)) {
+            SettingsManager.setTelexEnabled(this, true)
+            showLayoutSwitchToast("Tiếng Việt (Telex)")
+            return
+        }
+        SettingsManager.setTelexEnabled(this, false)
         suppressNextLayoutReload = true
         val nextLayout = SettingsManager.cycleKeyboardLayout(this)
         if (nextLayout != null) {
             switchToLayout(nextLayout, showToast = true)
         }
+    }
+
+    /**
+     * Rewrites the word before the cursor when the key is a Telex modifier for it
+     * (e.g. "viet" + s -> "viết"). Returns false to let the key be typed normally.
+     */
+    private fun handleTelexKey(keyCode: Int, event: KeyEvent?, ic: InputConnection): Boolean {
+        if (!SettingsManager.getTelexEnabled(this)) return false
+        if (keyCode !in KeyEvent.KEYCODE_A..KeyEvent.KEYCODE_Z || (event?.repeatCount ?: 0) > 0) return false
+        // URL and filter fields stay on: Chrome's address bar is also its search box
+        if (inputContextState.isPasswordField || inputContextState.isEmailField || isNumericField) return false
+        val modifierActive = altPressed || altLatchActive || altOneShot || altPhysicallyPressed ||
+            ctrlPressed || ctrlLatchActive || ctrlOneShot || ctrlPhysicallyPressed ||
+            event?.isAltPressed == true || event?.isCtrlPressed == true ||
+            symbolPickerPopup?.isShowing() == true
+        if (modifierActive) return false
+
+        val key = LayoutMappingRepository.getCharacterWithModifiers(
+            keyCode,
+            event?.isShiftPressed == true,
+            capsLockEnabled,
+            shiftOneShot
+        ) ?: return false
+        if (key.lowercaseChar() !in 'a'..'z') return false
+        if (!ic.getSelectedText(0).isNullOrEmpty()) return false
+        // Editing inside a word: leave it alone
+        if (ic.getTextAfterCursor(1, 0)?.firstOrNull()?.isLetter() == true) return false
+
+        val before = ic.getTextBeforeCursor(TELEX_MAX_WORD_LENGTH, 0)?.toString() ?: return false
+        val word = before.takeLastWhile { it.isLetter() }
+        val replacement = TelexEngine.applyKey(word, key) ?: return false
+
+        ic.beginBatchEdit()
+        if (word.isNotEmpty()) ic.deleteSurroundingText(word.length, 0)
+        ic.commitText(replacement, 1)
+        ic.endBatchEdit()
+        if (shiftOneShot) {
+            modifierStateController.consumeShiftOneShot()
+            updateStatusBarText()
+        }
+        return true
     }
 
     private fun showLayoutSwitchToast(displayName: String) {
@@ -1369,7 +1418,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), LifecycleOwner,
 
     override fun onStartInputView(info: EditorInfo?, restarting: Boolean) {
         super.onStartInputView(info, restarting)
-        
+
         // Update lifecycle to STARTED
         lifecycleRegistry.currentState = Lifecycle.State.STARTED
         lifecycleRegistry.currentState = Lifecycle.State.RESUMED
@@ -1512,6 +1561,11 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), LifecycleOwner,
             keyCode == KeyEvent.KEYCODE_SYM
         }
     }
+
+    private fun isVolumeKey(keyCode: Int): Boolean =
+        keyCode == KeyEvent.KEYCODE_VOLUME_UP ||
+            keyCode == KeyEvent.KEYCODE_VOLUME_DOWN ||
+            keyCode == KeyEvent.KEYCODE_VOLUME_MUTE
 
     private fun handleCurrencyKey(event: KeyEvent?): Boolean {
         if (deviceType != "Q25") {
@@ -1781,6 +1835,32 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), LifecycleOwner,
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        // The Q25 keyboard driver turns Sym+K/L/$ into volume keys: always let the system change
+        // the volume, and drop the symbol picker / double-tap timer the Sym press just started
+        if (isVolumeKey(keyCode)) {
+            if (event?.isAltPressed == true) {
+                symbolPickerPopup?.dismiss()
+                lastSymPressTime = 0
+            }
+            return false
+        }
+
+        // The Q25 firmware only reports Alt while it is held together with another key, so any key
+        // that arrives without Alt in its meta state means our Alt state is stale (e.g. its key-up
+        // was delivered while no field had focus): drop it instead of leaving Alt stuck on.
+        val isModifierKeyCode = keyCode == KeyEvent.KEYCODE_SHIFT_LEFT ||
+            keyCode == KeyEvent.KEYCODE_SHIFT_RIGHT ||
+            keyCode == KeyEvent.KEYCODE_ALT_LEFT ||
+            keyCode == KeyEvent.KEYCODE_ALT_RIGHT ||
+            isCtrlKey(keyCode) ||
+            isSymKey(keyCode)
+        if (deviceType == "Q25" && event != null && !isModifierKeyCode && !event.isAltPressed &&
+            (altPressed || altPhysicallyPressed || altOneShot || altLatchActive)
+        ) {
+            modifierStateController.clearAltState(resetPressedState = true)
+            updateStatusBarText()
+        }
+
         // Handle clipboard history popup key events FIRST (before any other processing)
         if (clipboardHistoryPopup?.isShowing() == true) {
             // Block Alt key itself when popup is showing
@@ -2130,7 +2210,11 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), LifecycleOwner,
         }
         
         val ic = currentInputConnection
-        
+
+        if (!isTerminalApp && !isModifierKey && ic != null && handleTelexKey(keyCode, event, ic)) {
+            return true
+        }
+
         // For terminal apps, handle modifiers differently
         // Terminal apps like Termux need raw key events for most keys, but Alt mappings as text
         // Modifier keys are handled by normal IME logic to update state properly
@@ -2488,6 +2572,10 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), LifecycleOwner,
     }
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
+        if (isVolumeKey(keyCode)) {
+            return false
+        }
+
         // Block D-pad input when emoji shortcode popup is visible
         if (emojiShortcodePopup?.isShowing() == true) {
             if (keyCode == KeyEvent.KEYCODE_DPAD_UP ||

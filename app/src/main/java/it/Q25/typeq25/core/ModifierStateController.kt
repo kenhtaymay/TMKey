@@ -76,6 +76,10 @@ class ModifierStateController(
     private val ctrlState = ModifierKeyHandler.CtrlState()
     private val altState = ModifierKeyHandler.AltState()
 
+    // Alt held as a chord (another key pressed before release) must not leave one-shot on:
+    // the Q25 keyboard firmware never sends a lone Alt tap, so it could not be turned off.
+    private var altUsedWhileHeld = false
+
     fun registerModifierTap(keyCode: Int): Boolean {
         val isConsecutive = lastKeyWasModifier && lastModifierKeyCode == keyCode
         lastKeyWasModifier = true
@@ -86,6 +90,9 @@ class ModifierStateController(
     fun registerNonModifierKey() {
         lastKeyWasModifier = false
         lastModifierKeyCode = 0
+        if (altState.pressed) {
+            altUsedWhileHeld = true
+        }
     }
 
     data class Snapshot(
@@ -251,12 +258,20 @@ class ModifierStateController(
             isConsecutiveTap = isConsecutiveTap
         )
         altPressed = true
+        altUsedWhileHeld = false
         return result
     }
 
     fun handleAltKeyUp(keyCode: Int): ModifierKeyHandler.ModifierKeyResult {
         val result = modifierKeyHandler.handleAltKeyUp(keyCode, altState)
         altPressed = false
+        if (altUsedWhileHeld && altState.oneShot) {
+            altState.oneShot = false
+            altState.lastPressTime = 0
+            altUsedWhileHeld = false
+            return ModifierKeyHandler.ModifierKeyResult(shouldUpdateStatusBar = true)
+        }
+        altUsedWhileHeld = false
         return result
     }
 

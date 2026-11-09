@@ -94,10 +94,10 @@ class SpeechRecognitionActivity : Activity() {
                         // Send result via broadcast to this app's package
                         val broadcastIntent = Intent(ACTION_SPEECH_RESULT).apply {
                             putExtra(EXTRA_TEXT, spokenText)
-                            setPackage("it.srik.TypeQ25") // Send to our own app package
+                            setPackage(packageName) // Send to our own app package
                         }
                         sendBroadcast(broadcastIntent)
-                        Log.d(TAG, "Broadcast sent to it.srik.TypeQ25: $ACTION_SPEECH_RESULT with text: $spokenText")
+                        Log.d(TAG, "Broadcast sent to $packageName: $ACTION_SPEECH_RESULT with text: $spokenText")
                     } else {
                         Log.d(TAG, "No text recognized")
                     }

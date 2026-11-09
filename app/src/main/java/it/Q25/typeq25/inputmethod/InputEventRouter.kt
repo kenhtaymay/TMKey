@@ -1072,7 +1072,8 @@ class InputEventRouter(
 
         // Numeric fields always use the Alt mapping for every key press (short press included).
         if (isNumericField) {
-            val altChar = altSymManager.getAltMappings()[keyCode]
+            // The Q25 0 key (keycode 7) is a digit here, never the speech shortcut
+            val altChar = if (keyCode == KeyEvent.KEYCODE_0) "0" else altSymManager.getAltMappings()[keyCode]
             if (altChar != null) {
                 ic.commitText(altChar, 1)
                 mainHandler.postDelayed({

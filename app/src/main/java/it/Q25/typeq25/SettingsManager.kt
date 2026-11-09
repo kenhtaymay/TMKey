@@ -46,6 +46,7 @@ object SettingsManager {
     private const val KEY_SYMBOL_SHORTCODE_ENABLED = "symbol_shortcode_enabled" // Enable symbol shortcodes (:tm: -> ™)
     private const val KEY_KEYCODE_7_BEHAVIOR = "keycode_7_behavior" // Behavior for KEYCODE_7 (Q25 ONLY): "zero" or "alt_zero"
     private const val KEY_USE_ARABIC_NUMERALS = "use_arabic_numerals" // Use Arabic-Indic numerals (٠-٩) instead of Western (0-9) when Arabic layout is active
+    private const val KEY_TELEX_ENABLED = "telex_enabled" // Vietnamese Telex input, toggled from the Ctrl+Space layout cycle
     private const val KEY_USE_ARABIC_PUNCTUATION = "use_arabic_punctuation" // Use Arabic punctuation (،؟) instead of Western (,?) when Arabic layout is active
     
     // Default values
@@ -170,7 +171,23 @@ object SettingsManager {
             .putBoolean(KEY_DOUBLE_SPACE_TO_PERIOD, enabled)
             .apply()
     }
-    
+
+    /**
+     * Returns whether Vietnamese Telex input is active.
+     */
+    fun getTelexEnabled(context: Context): Boolean {
+        return getPreferences(context).getBoolean(KEY_TELEX_ENABLED, true)
+    }
+
+    /**
+     * Sets whether Vietnamese Telex input is active.
+     */
+    fun setTelexEnabled(context: Context, enabled: Boolean) {
+        getPreferences(context).edit()
+            .putBoolean(KEY_TELEX_ENABLED, enabled)
+            .apply()
+    }
+
     /**
      * Returns the state of swipe-to-delete (keycode 322).
      */

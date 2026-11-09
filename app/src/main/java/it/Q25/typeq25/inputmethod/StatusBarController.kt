@@ -156,6 +156,13 @@ class StatusBarController(
                     ViewGroup.LayoutParams.WRAP_CONTENT
                 )
                 setBackgroundColor(DEFAULT_BACKGROUND)
+                // Facebook Lite ignores an IME shorter than 60dp and leaves its input box under the bar
+                minimumHeight = TypedValue.applyDimension(
+                    TypedValue.COMPLEX_UNIT_DIP,
+                    60f,
+                    context.resources.displayMetrics
+                ).toInt()
+                gravity = Gravity.CENTER_VERTICAL
             }
 
             // Container for modifier indicators (horizontal, left-aligned).

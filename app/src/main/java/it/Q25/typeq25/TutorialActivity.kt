@@ -41,7 +41,7 @@ class TutorialActivity : ComponentActivity() {
 fun TutorialScreen(onComplete: () -> Unit) {
     val pagerState = rememberPagerState()
     val scope = rememberCoroutineScope()
-    val totalPages = 6
+    val totalPages = 5
 
     Scaffold(
         bottomBar = {
@@ -56,22 +56,19 @@ fun TutorialScreen(onComplete: () -> Unit) {
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    // Skip button
                     TextButton(
                         onClick = onComplete,
                         enabled = pagerState.currentPage < totalPages - 1
                     ) {
-                        Text(if (pagerState.currentPage < totalPages - 1) "Skip" else "")
+                        Text(if (pagerState.currentPage < totalPages - 1) "Bỏ qua" else "")
                     }
 
-                    // Page indicator
                     HorizontalPagerIndicator(
                         pagerState = pagerState,
                         modifier = Modifier.padding(horizontal = 16.dp),
                         activeColor = MaterialTheme.colorScheme.primary
                     )
 
-                    // Next/Done button
                     Button(
                         onClick = {
                             if (pagerState.currentPage < totalPages - 1) {
@@ -83,7 +80,7 @@ fun TutorialScreen(onComplete: () -> Unit) {
                             }
                         }
                     ) {
-                        Text(if (pagerState.currentPage < totalPages - 1) "Next" else "Done")
+                        Text(if (pagerState.currentPage < totalPages - 1) "Tiếp" else "Bắt đầu")
                     }
                 }
             }
@@ -98,11 +95,10 @@ fun TutorialScreen(onComplete: () -> Unit) {
         ) { page ->
             when (page) {
                 0 -> WelcomePage()
-                1 -> BasicTypingPage()
-                2 -> ModifierKeysPage()
-                3 -> SymbolPickerPage()
-                4 -> AdvancedFeaturesPage()
-                5 -> TipsAndTricksPage()
+                1 -> SetupPage()
+                2 -> TelexPage()
+                3 -> ModifierKeysPage()
+                4 -> ShortcutsPage()
             }
         }
     }
@@ -112,64 +108,83 @@ fun TutorialScreen(onComplete: () -> Unit) {
 fun WelcomePage() {
     TutorialPageLayout(
         icon = Icons.Default.Keyboard,
-        title = "Welcome to TypeQ25!",
-        subtitle = "Your physical keyboard companion for the Q25",
-        iconTint = MaterialTheme.colorScheme.primary
+        title = "Chào mừng đến với TMKey",
+        subtitle = "Gõ tiếng Việt Telex ngay trên bàn phím cứng của Q25 và P26"
     ) {
         TutorialItem(
-            icon = Icons.Default.Keyboard,
-            title = "Physical Keyboard First",
-            description = "Designed specifically for your Q25's physical QWERTY keyboard"
+            icon = Icons.Default.Translate,
+            title = "Telex bật sẵn",
+            description = "Cài xong là gõ được tiếng Việt có dấu, không cần bàn phím ảo"
         )
         TutorialItem(
-            icon = Icons.Default.Speed,
-            title = "Fast & Efficient",
-            description = "Type faster with keyboard shortcuts and smart features"
+            icon = Icons.Default.KeyboardAlt,
+            title = "Làm riêng cho phím cứng",
+            description = "Shift, Alt, Ctrl, SYM và các phím tắt được tối ưu cho máy bàn phím QWERTY"
         )
         TutorialItem(
-            icon = Icons.Default.Settings,
-            title = "Highly Customizable",
-            description = "Customize layouts, shortcuts, and modifier behavior"
+            icon = Icons.Default.Lock,
+            title = "Riêng tư",
+            description = "Không quảng cáo, không thu thập dữ liệu. Bản trên Google Play không có quyền Internet nên những gì bạn gõ không rời khỏi máy"
         )
     }
 }
 
 @Composable
-fun BasicTypingPage() {
+fun SetupPage() {
     TutorialPageLayout(
-        icon = Icons.Default.Keyboard,
-        title = "Basic Typing",
-        subtitle = "Master the fundamentals"
+        icon = Icons.Default.Settings,
+        title = "Bật bàn phím",
+        subtitle = "Chỉ cần làm một lần"
     ) {
         TutorialItem(
-            icon = Icons.Default.KeyboardAlt,
-            title = "Standard Typing",
-            description = "Type normally using your physical keyboard"
+            icon = Icons.Default.ToggleOn,
+            title = "1. Bật TMKey",
+            description = "Ở màn hình chính, chọn \"Enable TMKey\" rồi gạt công tắc TMKey - Telex"
         )
         TutorialItem(
-            icon = Icons.Default.ShortText,
-            title = "Shift for Capitals",
-            description = "Press Shift once to capitalize next letter\nDouble-tap Shift for CAPS LOCK"
+            icon = Icons.Default.Keyboard,
+            title = "2. Chọn làm bàn phím",
+            description = "Chọn \"Choose input method\" rồi chọn TMKey - Telex"
         )
         TutorialItem(
-            icon = Icons.Default.Backspace,
-            title = "Quick Delete",
-            description = "Backspace deletes characters\nCtrl+Backspace deletes whole words"
+            icon = Icons.Default.Edit,
+            title = "3. Gõ thử",
+            description = "Gõ vào ô thử trên màn hình chính, ví dụ: tieesng vieejt → tiếng việt"
+        )
+    }
+}
+
+@Composable
+fun TelexPage() {
+    TutorialPageLayout(
+        icon = Icons.Default.Translate,
+        title = "Gõ Telex",
+        subtitle = "Gõ chữ trước, thêm dấu sau"
+    ) {
+        TutorialItem(
+            icon = Icons.Default.TextFields,
+            title = "Chữ có mũ, có móc",
+            description = "aa → â    ee → ê    oo → ô\naw → ă    ow → ơ    uw → ư\ndd → đ    w → ư"
         )
         TutorialItem(
-            icon = Icons.Default.Check,
-            title = "Auto-Correction",
-            description = "Smart auto-correct learns from your typing patterns"
+            icon = Icons.Default.FormatQuote,
+            title = "Dấu thanh",
+            description = "s → sắc    f → huyền    r → hỏi\nx → ngã    j → nặng    z → xoá dấu\nVí dụ: hoawjc → hoặc, dduwowngf → đường"
         )
         TutorialItem(
-            icon = Icons.Default.MoreVert,
-            title = "Quick Actions",
-            description = "• Tap ⋮ button in status bar for quick actions menu\n• Copy, Paste, Cut, Select All, Undo\n• Fast access to common editing tasks"
+            icon = Icons.Default.Undo,
+            title = "Gõ lặp để huỷ",
+            description = "Gõ phím dấu thêm lần nữa để bỏ dấu và giữ chữ cái, ví dụ: ass → as"
         )
         TutorialItem(
-            icon = Icons.Default.Mic,
-            title = "0 Key for Speech-to-Text (Q25)",
-            description = "• Press 0 key in any text field to start voice input\n• Hands-free typing with voice recognition\n• Automatic punctuation and capitalization"
+            icon = Icons.Default.SwapHoriz,
+            title = "Bật/tắt Telex: Ctrl + Space",
+            description = "Một thông báo nhỏ cho biết đang gõ tiếng Việt hay không dấu"
+        )
+        TutorialItem(
+            icon = Icons.Default.Info,
+            title = "Tự gõ không dấu ở ô đặc biệt",
+            description = "Ô mật khẩu, email và ô số luôn gõ không dấu. Thanh địa chỉ trình duyệt vẫn gõ được tiếng Việt để tìm kiếm"
         )
     }
 }
@@ -177,158 +192,63 @@ fun BasicTypingPage() {
 @Composable
 fun ModifierKeysPage() {
     TutorialPageLayout(
-        icon = Icons.Default.BorderColor,
-        title = "Modifier Keys",
-        subtitle = "Ctrl, Alt, and Symbol key usage"
+        icon = Icons.Default.KeyboardAlt,
+        title = "Phím bổ trợ",
+        subtitle = "Nhấn một lần cho phím kế tiếp, nhấn đúp để khoá"
     ) {
+        TutorialItem(
+            icon = Icons.Default.ArrowUpward,
+            title = "Shift",
+            description = "Nhấn một lần: viết hoa chữ kế tiếp\nNhấn đúp: bật/tắt CAPS LOCK"
+        )
+        TutorialItem(
+            icon = Icons.Default.Dialpad,
+            title = "Alt",
+            description = "Giữ Alt và nhấn phím để ra số hoặc ký tự in trên phím\nÔ chỉ nhập số: gõ thẳng ra số, không cần Alt\nNhấn giữ một phím cũng ra ký tự Alt của phím đó"
+        )
         TutorialItem(
             icon = Icons.Default.ControlCamera,
-            title = "Ctrl Key (⚙️ or Right Shift on Q25)",
-            description = "• Single-shot: Hold Ctrl, press key (modifier for one key)\n• Latched mode: Press Ctrl twice quickly (stays active until next Ctrl press)\n• Right Shift acts as Ctrl on Q25\n• Additional features available when Ctrl is latched\n• Ctrl+Space: Switch keyboard layout\n• Ctrl+C/V/X/A: Copy/Paste/Cut/Select All"
-        )
-        TutorialItem(
-            icon = Icons.Default.AppShortcut,
-            title = "Alt Key (🔣 key on Q25)",
-            description = "• Single-shot: Hold Alt, press key (modifier for one key)\n• Latched mode: Press Alt twice quickly (stays active until next key)\n• Alt+W/E/R/S/D/F: Numbers 1-6\n• Alt+Z/X/C: Numbers 7-9\n• Alt+letters: Type special characters"
+            title = "Ctrl (Shift phải trên Q25)",
+            description = "Ctrl + C / X / V / A / Z: chép, cắt, dán, chọn hết, hoàn tác\nCtrl + Backspace: xoá cả từ\nCtrl + E / S / D / F: di chuyển con trỏ"
         )
         TutorialItem(
             icon = Icons.Default.EmojiEmotions,
-            title = "SYM Key (⚙️ key on Q25)",
-            description = "• Press SYM to open Symbol Picker popup\n• Navigate with arrow keys or touch\n• Quick access to emojis and symbols"
+            title = "SYM",
+            description = "Mở bảng emoji và ký hiệu, nhấn phím chữ tương ứng để chèn\nNhấn giữ một biểu tượng để thêm vào Yêu thích"
         )
     }
 }
 
 @Composable
-fun SymbolPickerPage() {
+fun ShortcutsPage() {
     TutorialPageLayout(
-        icon = Icons.Default.EmojiSymbols,
-        title = "Symbol Picker",
-        subtitle = "Your emoji and symbol companion"
+        icon = Icons.Default.Bolt,
+        title = "Phím tắt nhanh",
+        subtitle = "Dùng máy không cần chạm màn hình"
     ) {
         TutorialItem(
-            icon = Icons.Default.Star,
-            title = "Favorites Tab (Default)",
-            description = "• Opens by default for quick access\n• Long-press any symbol or emoji to add to Favorites\n• Up to 26 favorite items (Q-Z layout)\n• Long-press again to remove from Favorites\n• Star indicators show favorited items"
-        )
-        TutorialItem(
-            icon = Icons.Default.KeyboardAlt,
-            title = "Physical Key Insertion",
-            description = "Press Q-Z keys to insert symbol/emoji shown on that button"
-        )
-        TutorialItem(
-            icon = Icons.Default.SwapHoriz,
-            title = "Navigation Shortcuts",
-            description = "• Ctrl+T: Cycle between Favorites/Symbols/Emojis\n• Ctrl latch + S/J: Previous page\n• Ctrl latch + F/L: Next page\n• Ctrl latch + E/I: Previous category\n• Ctrl latch + D/K: Next category\n• DPad keys: Navigate UI elements"
-        )
-        TutorialItem(
-            icon = Icons.Default.History,
-            title = "Recent Items",
-            description = "• Alt+W through Alt+C: Insert recent items (1-9)\n• Alt+0: Insert 10th recent item\n• Most used items appear first"
-        )
-        TutorialItem(
-            icon = Icons.Default.TouchApp,
-            title = "Touch Support",
-            description = "• Tap buttons to insert\n• Long-press to add/remove favorites\n• Swipe left/right to change pages\n• Tap categories to switch"
-        )
-    }
-}
-
-@Composable
-fun AdvancedFeaturesPage() {
-    TutorialPageLayout(
-        icon = Icons.Default.AutoAwesome,
-        title = "Advanced Features",
-        subtitle = "Power user tricks"
-    ) {
-        TutorialItem(
-            icon = Icons.Default.EmojiEmotions,
-            title = "Emoji & Symbol Shortcodes",
-            description = "• Type :smile: to insert 😊\n• Type :tm: to insert ™, :copy: to insert ©\n• Suggestions appear as you type\n• Tab/Enter to insert, Esc to dismiss\n• Alt+1-9,0 for quick selection\n• Tap outside popup to dismiss\n• Toggle in Settings → Text Input"
-        )
-        TutorialItem(
-            icon = Icons.Default.NavigateBefore,
-            title = "Navigation Mode",
-            description = "• Double-press Ctrl to enable Nav Mode\n• Use keyboard as D-pad for navigation\n• Exit with Ctrl again"
-        )
-        TutorialItem(
-            icon = Icons.Default.Apps,
-            title = "Power Shortcuts & Launcher Shortcuts",
-            description = "• Launcher Shortcuts: Press a letter key in the launcher to open assigned apps\n• Power Shortcuts: Press SYM + letter key from anywhere to launch apps\n• Configure in Settings → Advanced Settings\n• Assign your favorite apps to keys A-Z\n• Quick app launching without touching the screen\n• Toast notification shows which key to press"
-        )
-        TutorialItem(
-            icon = Icons.Default.Mic,
-            title = "Speech-to-Text",
-            description = "• Q25: Press 0 key to start voice input\n• Other devices: Alt+Ctrl together\n• Works in any text field\n• Automatic punctuation"
-        )
-        TutorialItem(
-            icon = Icons.Default.Phone,
-            title = "Phone Speakerphone Toggle (Q25)",
-            description = "• Press Alt+Currency Key during a phone call\n• Quickly toggle speakerphone on/off\n• No need to touch the screen while on a call"
+            icon = Icons.Default.VolumeUp,
+            title = "Âm lượng",
+            description = "SYM + L: tăng    SYM + K: giảm    SYM + $: tắt tiếng"
         )
         TutorialItem(
             icon = Icons.Default.Lightbulb,
-            title = "Flashlight Toggle",
-            description = "• Double-tap SYM key quickly to toggle flashlight\n• Works when keyboard is not active\n• Can be used on lock screen and home screen"
+            title = "Đèn nền bàn phím",
+            description = "SYM + 0: bật/tắt đèn nền"
         )
         TutorialItem(
-            icon = Icons.Default.AttachMoney,
-            title = "Currency Symbol",
-            description = "• Q25 has a dedicated currency key\n• Assign your desired currency from Settings\n• Quick access to your preferred currency symbol"
+            icon = Icons.Default.Navigation,
+            title = "Chế độ điều hướng",
+            description = "Nhấn đúp Ctrl khi không ở ô nhập để dùng E / S / D / F như phím mũi tên. Nhấn Ctrl hoặc Back để thoát"
         )
         TutorialItem(
-            icon = Icons.Default.Swipe,
-            title = "Swipe Pad Navigation",
-            description = "• The keyboard status bar doubles as a swipe pad\n• Swipe to move the cursor left/right\n• Quick cursor positioning without arrow keys\n• Available on supported devices (Titan 2)"
-        )
-        TutorialItem(
-            icon = Icons.Default.Language,
-            title = "Keyboard Layout Editing",
-            description = "• Convert between QWERTY, AZERTY, QWERTZ layouts\n• Settings → Keyboard Layout\n• Edit non-English layouts to customize key mappings\n• Match your physical keyboard layout\n• Seamless typing in different languages\n• Switch layouts quickly with Ctrl+Space\n• Arabic layout: Dedicated editing screen to reorder characters per key\n  - Matches your physical keyboard's Arabic labels\n  - Drag and drop characters to reposition\n  - Preview changes in real-time"
-        )
-        TutorialItem(
-            icon = Icons.Default.ViewCompact,
-            title = "Minimal UI Mode",
-            description = "• Enable in Settings → Appearance\n• Hides suggestions, variations, mic, quick actions and settings\n• Perfect for physical keyboard-only typing\n• Saves screen space and battery"
-        )
-    }
-}
-
-@Composable
-fun TipsAndTricksPage() {
-    TutorialPageLayout(
-        icon = Icons.Default.Lightbulb,
-        title = "Tips & Tricks",
-        subtitle = "Get the most out of TypeQ25"
-    ) {
-        TutorialItem(
-            icon = Icons.Default.Speed,
-            title = "Typing Faster",
-            description = "• Use Ctrl+Backspace to delete words quickly\n• Learn keyboard shortcuts for common actions\n• Enable word predictions in settings"
-        )
-        TutorialItem(
-            icon = Icons.Default.Settings,
-            title = "Quick Settings Access",
-            description = "• Tap the gear icon on the keyboard\n• Access settings without leaving your app\n• Quick toggle for common preferences\n• No interruption to your workflow"
-        )
-        TutorialItem(
-            icon = Icons.Default.Palette,
-            title = "Customize Your Experience",
-            description = "• Settings → Customization for layouts\n• Create custom keyboard shortcuts\n• Adjust modifier key behavior\n• Customize SYM layer emojis and symbols"
-        )
-        TutorialItem(
-            icon = Icons.Default.Book,
-            title = "Enhanced Dictionary Management",
-            description = "• Search functionality in dictionary corrections\n• Custom entries appear at the top\n• Universal corrections (TypeQ25)\n• Add your own autocorrections easily"
-        )
-        TutorialItem(
-            icon = Icons.Default.School,
-            title = "Status Bar Guide",
-            description = "• Shows active modifiers (Ctrl, Alt, Shift)\n• Displays current keyboard mode\n• Tap to access quick settings"
+            icon = Icons.Default.Apps,
+            title = "Mở nhanh ứng dụng",
+            description = "Ở màn hình chính, nhấn một phím chữ để mở ứng dụng đã gán cho phím đó (Settings → Advanced)"
         )
         TutorialItem(
             icon = Icons.Default.Refresh,
-            title = "View This Tutorial Again",
+            title = "Xem lại hướng dẫn",
             description = "Settings → Help & About → Tutorial"
         )
     }

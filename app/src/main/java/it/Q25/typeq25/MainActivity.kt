@@ -1,4 +1,4 @@
-package it.srik.TypeQ25
+﻿package it.srik.TypeQ25
 
 import android.content.Context
 import android.content.Intent
@@ -555,8 +555,8 @@ private fun checkImeStatus(
 ) {
     try {
         val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        val TypeQ25PackageName = "it.srik.TypeQ25"
-        val TypeQ25ImeId = "it.srik.TypeQ25/.inputmethod.PhysicalKeyboardInputMethodService"
+        val TypeQ25PackageName = context.packageName
+        val TypeQ25ImeId = "${context.packageName}/it.srik.TypeQ25.inputmethod.PhysicalKeyboardInputMethodService"
         
         // Check if TypeQ25 is enabled using InputMethodManager
         val enabledInputMethods = imm.enabledInputMethodList
@@ -567,7 +567,10 @@ private fun checkImeStatus(
         
         // Check if TypeQ25 is selected
         var isSelected = false
-        if (isEnabled) {
+        if (isEnabled && Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            // Android 14+ blocks reading DEFAULT_INPUT_METHOD but exposes the current IME directly
+            isSelected = imm.currentInputMethodInfo?.packageName == TypeQ25PackageName
+        } else if (isEnabled) {
             // Try to read DEFAULT_INPUT_METHOD
             // On Android 13 (API 33) it might still work even with targetSdk 36
             // On Android 14+ (API 34+) it will throw SecurityException

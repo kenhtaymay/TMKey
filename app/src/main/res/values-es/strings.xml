@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">TypeQ25</string>
-    <string name="input_method_name">TypeQ25 Physical Keyboard</string>
+    <string name="app_name">TMKey</string>
+    <string name="input_method_name">TMKey - Telex</string>
     <string name="input_method_name_en">English</string>
     <string name="input_method_name_it">Italiano</string>
     <string name="input_method_name_fr">Français</string>
@@ -42,22 +42,22 @@
     <string name="info_description">La configuración se guarda automáticamente y se aplica inmediatamente al método de entrada.</string>
     
     <!-- Main Activity -->
-    <string name="keyboard_title">Teclado TypeQ25</string>
+    <string name="keyboard_title">Teclado TMKey</string>
     <string name="keyboard_subtitle">Teclado físico con soporte de pulsación larga</string>
     <string name="settings_content_description">Configuración</string>
     
     <!-- Installation Section -->
     <string name="installation_title">Instalación</string>
     <string name="installation_step1">1. Haga clic en el botón de abajo para abrir la configuración</string>
-    <string name="installation_step2">2. Active \'Teclado Físico TypeQ25\'</string>
+    <string name="installation_step2">2. Active \'Teclado Físico TMKey\'</string>
     <string name="installation_step3">3. Vuelva aquí y pruebe el teclado</string>
     <string name="open_keyboard_settings">Abrir Configuración del Teclado</string>
     
     <!-- Main Activity - Enable/Select IME -->
-    <string name="enable_TypeQ25">Activar TypeQ25</string>
-    <string name="TypeQ25_not_enabled">TypeQ25 no está activado</string>
+    <string name="enable_TypeQ25">Activar TMKey</string>
+    <string name="TypeQ25_not_enabled">TMKey no está activado</string>
     <string name="choose_input_method">Elegir método de entrada</string>
-    <string name="TypeQ25_not_selected">TypeQ25 no está seleccionado</string>
+    <string name="TypeQ25_not_selected">TMKey no está seleccionado</string>
     
     <!-- Test Section -->
     <string name="test_keyboard_title">Prueba de Teclado</string>
@@ -179,8 +179,8 @@
     <string name="launcher_shortcut_assignment_key_name">Tecla %1$d</string>
     
     <!-- Notification Helper -->
-    <string name="notification_nav_mode_channel_name">TypeQ25 Nav Mode</string>
-    <string name="notification_nav_mode_channel_description">Notificaciones para el modo nav de TypeQ25</string>
+    <string name="notification_nav_mode_channel_name">TMKey Nav Mode</string>
+    <string name="notification_nav_mode_channel_description">Notificaciones para el modo nav de TMKey</string>
     <string name="notification_nav_mode_activated_title">Modo Nav Activado</string>
     <string name="notification_nav_mode_activated_text">Modo nav activado</string>
     
@@ -259,7 +259,7 @@
     <string name="settings_trackpad_debug_description">Probar eventos de trackpad/teclado táctil</string>
     
     <!-- Auto Correct Settings -->
-    <string name="auto_correct_TypeQ25_name">TypeQ25</string>
+    <string name="auto_correct_TypeQ25_name">TMKey</string>
     
     <!-- Settings Categories -->
     <string name="settings_category_keyboard_timing">Teclado &amp; Temporización</string>

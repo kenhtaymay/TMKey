@@ -82,13 +82,13 @@ fun CustomTopBar(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "TypeQ25",
+                        text = "TMKey",
                         style = MaterialTheme.typography.headlineSmall,
                         fontWeight = FontWeight.Bold,
                         color = BlackBerrySilver
                     )
                     Text(
-                        text = "Physical Keyboard IME",
+                        text = "Telex cho bàn phím cứng",
                         style = MaterialTheme.typography.bodySmall,
                         color = BlackBerryBlue,
                         fontWeight = FontWeight.Medium
