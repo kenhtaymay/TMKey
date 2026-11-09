@@ -30,4 +30,4 @@ Khi bạn dùng tính năng nhập bằng giọng nói, TMKey mở ứng dụng 
 TMKey là phần mềm tự do theo giấy phép GPL-3.0. Mã nguồn công khai tại: <https://github.com/kenhtaymay/TMKey>
 
 ## Liên hệ
-Email: nouslogic.ai@gmail.com
+Email: tin@hs2t.com
