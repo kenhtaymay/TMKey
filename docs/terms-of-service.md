@@ -41,4 +41,4 @@ Chúng tôi có thể cập nhật điều khoản này. Phiên bản mới sẽ
 Điều khoản này được điều chỉnh bởi pháp luật nước Cộng hoà Xã hội Chủ nghĩa Việt Nam.
 
 ## 11. Liên hệ
-Email: nouslogic.ai@gmail.com
+Email: tin@hs2t.com
